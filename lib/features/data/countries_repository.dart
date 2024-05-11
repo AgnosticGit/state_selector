@@ -1,6 +1,7 @@
 import 'package:either_dart/either.dart';
 import 'package:state_selector/core/api/failure.dart';
 import 'package:state_selector/core/api/v1/api_urls_v1.dart';
+import 'package:state_selector/core/l10n/failures.dart';
 import 'package:state_selector/features/domain/models/country_model.dart';
 import 'package:dio/dio.dart';
 
@@ -19,7 +20,7 @@ class CountriesRepository {
 
       return Right(countries);
     } catch (e) {
-      return Left(Failure(1, ''));
+      return const Left(Failures.networkError);
     }
   }
 }

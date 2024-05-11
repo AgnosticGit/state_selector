@@ -1,10 +1,7 @@
-import 'package:either_dart/either.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
-import 'package:state_selector/core/api/failure.dart';
 import 'package:state_selector/features/data/maps_repository.dart';
 import 'package:state_selector/features/domain/models/country_model.dart';
-import 'package:state_selector/features/domain/models/geo_data_model.dart';
 import 'package:state_selector/features/domain/models/state_model.dart';
 import 'package:state_selector/features/domain/redux/app/app_state.dart';
 import 'package:state_selector/features/domain/redux/maps/maps_actions.dart';

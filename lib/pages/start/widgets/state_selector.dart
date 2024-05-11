@@ -1,14 +1,15 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:state_selector/core/assets/assets.gen.dart';
+import 'package:state_selector/core/l10n/l10n.dart';
 import 'package:state_selector/core/extensions/build_context_extension.dart';
 import 'package:state_selector/features/domain/models/state_model.dart';
 import 'package:state_selector/features/domain/redux/app/app_state.dart';
-import 'package:state_selector/features/domain/redux/countries/countries_actions.dart';
 import 'package:state_selector/features/domain/redux/maps/maps_thunk.dart';
 import 'package:state_selector/features/domain/redux/states/states_actions.dart';
 
@@ -17,12 +18,15 @@ class StateSelector extends StatefulWidget {
     required this.stateController,
     required this.stateFocusNode,
     required this.stateSuggestionsController,
+    required this.mapController,
     super.key,
   });
 
   final TextEditingController stateController;
   final FocusNode stateFocusNode;
   final SuggestionsController<StateModel> stateSuggestionsController;
+
+  final MapController mapController;
 
   @override
   State<StateSelector> createState() => _StateSelectorState();
@@ -41,6 +45,8 @@ class _StateSelectorState extends State<StateSelector> {
     return StoreBuilder<AppState>(
       builder: (_, store) {
         final countriesState = store.state.countriesState;
+        final statesState = store.state.statesState;
+        final mapsState = store.state.mapsState;
 
         return TypeAheadField(
           controller: widget.stateController,
@@ -49,20 +55,26 @@ class _StateSelectorState extends State<StateSelector> {
           suggestionsController: widget.stateSuggestionsController,
           suggestionsCallback: stateSuggestionsCallback,
           builder: (context, _, __) {
-            if (countriesState.loadingCountriesProccess.loading) {
-              return Container();
-            }
+            final isLoading = statesState.loadingStatesProccess.loading;
 
             return TextField(
-              enabled: countriesState.selectedCountry != null,
+              enabled: countriesState.selectedCountry != null && !isLoading,
               onChanged: (_) => setState(() {}),
               controller: widget.stateController,
               focusNode: widget.stateFocusNode,
               decoration: InputDecoration(
-                suffixIcon: _buildSuffixIcon(),
+                filled: true,
+                fillColor: Colors.white,
+                suffixIcon: _buildSuffixIcon(isLoading),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey.shade300),
+                ),
+                disabledBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
                 isDense: true,
                 border: const OutlineInputBorder(),
-                labelText: 'State',
+                labelText: L10n.state,
               ),
             );
           },
@@ -73,10 +85,15 @@ class _StateSelectorState extends State<StateSelector> {
           },
           onSelected: (state) async {
             setState(() => widget.stateController.text = state.name);
+            FocusManager.instance.primaryFocus?.unfocus();
             store.dispatch(StatesActionSelectState(state));
-            
+
             final selectedCountry = store.state.countriesState.selectedCountry;
             await store.dispatch(MapsThunkLoadGeoData(country: selectedCountry!, state: state));
+
+            if (mapsState.stateGeoData != null) {
+              widget.mapController.move(mapsState.stateGeoData!.center, 2);
+            }
           },
         );
       },
@@ -105,7 +122,19 @@ class _StateSelectorState extends State<StateSelector> {
     }
   }
 
-  Widget? _buildSuffixIcon() {
+  Widget? _buildSuffixIcon(bool isLoading) {
+    if (isLoading) {
+      return Container(
+        margin: const EdgeInsets.only(right: 10),
+        width: 10,
+        height: 10,
+        child: const LoadingIndicator(
+          indicatorType: Indicator.ballPulse,
+          colors: [Colors.blue],
+        ),
+      );
+    }
+
     if (widget.stateController.text.isNotEmpty) {
       return IconButton(
         padding: const EdgeInsets.all(0),

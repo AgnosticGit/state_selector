@@ -1,10 +1,12 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:state_selector/core/assets/assets.gen.dart';
+import 'package:state_selector/core/l10n/l10n.dart';
 import 'package:state_selector/core/extensions/build_context_extension.dart';
 import 'package:state_selector/features/domain/models/country_model.dart';
 import 'package:state_selector/features/domain/models/state_model.dart';
@@ -21,15 +23,17 @@ class CountrySelector extends StatefulWidget {
     required this.countryFocusNode,
     required this.stateFocusNode,
     required this.stateSuggestionsController,
+    required this.mapController,
     super.key,
   });
 
   final TextEditingController countryController;
-
   final FocusNode countryFocusNode;
-  final FocusNode stateFocusNode;
 
+  final FocusNode stateFocusNode;
   final SuggestionsController<StateModel> stateSuggestionsController;
+
+  final MapController mapController;
 
   @override
   State<CountrySelector> createState() => _CountrySelectorState();
@@ -47,6 +51,7 @@ class _CountrySelectorState extends State<CountrySelector> {
   Widget build(BuildContext context) {
     return StoreBuilder<AppState>(builder: (_, store) {
       final countriesState = store.state.countriesState;
+      final mapsState = store.state.mapsState;
 
       return TypeAheadField(
         controller: widget.countryController,
@@ -54,19 +59,22 @@ class _CountrySelectorState extends State<CountrySelector> {
         debounceDuration: Duration.zero,
         suggestionsCallback: _countrySuggestionsCallback,
         builder: (context, _, __) {
-          if (countriesState.loadingCountriesProccess.loading) {
-            return Container();
-          }
+          final isLoading = countriesState.loadingCountriesProccess.loading;
 
           return TextField(
             onChanged: (_) => setState(() {}),
             controller: widget.countryController,
             focusNode: widget.countryFocusNode,
+            enabled: !isLoading,
             decoration: InputDecoration(
-              suffixIcon: _buildSuffixIcon(),
+              filled: true,
+              fillColor: Colors.white,
+              suffixIcon: _buildSuffixIcon(isLoading),
               isDense: true,
-              border: const OutlineInputBorder(),
-              labelText: 'Country',
+              enabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey),
+              ),
+              labelText: L10n.country,
             ),
           );
         },
@@ -78,15 +86,32 @@ class _CountrySelectorState extends State<CountrySelector> {
         onSelected: (country) async {
           widget.stateSuggestionsController.refresh();
           setState(() => widget.countryController.text = country.name);
+          FocusManager.instance.primaryFocus?.unfocus();
 
           await store.dispatch(StatesThunkLoadStates(country));
           await store.dispatch(MapsThunkLoadGeoData(country: country));
+
+          if (mapsState.countryGeoData != null) {
+            widget.mapController.move(mapsState.countryGeoData!.center, 3);
+          }
         },
       );
     });
   }
 
-  Widget? _buildSuffixIcon() {
+  Widget? _buildSuffixIcon(bool isLoading) {
+    if (isLoading) {
+      return Container(
+        margin: const EdgeInsets.only(right: 10),
+        width: 10,
+        height: 10,
+        child: const LoadingIndicator(
+          indicatorType: Indicator.ballPulse,
+          colors: [Colors.blue],
+        ),
+      );
+    }
+
     if (widget.countryController.text.isNotEmpty) {
       return IconButton(
         padding: const EdgeInsets.all(0),

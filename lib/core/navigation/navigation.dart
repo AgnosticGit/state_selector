@@ -8,7 +8,7 @@ class Navigation {
     routes: [
       GoRoute(
         path: Routes.start,
-        builder: (context, state) => StartPage(),
+        builder: (context, state) => const StartPage(),
       ),
     ],
   );

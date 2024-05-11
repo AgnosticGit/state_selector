@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +8,7 @@ import 'package:redux_remote_devtools/redux_remote_devtools.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:state_selector/features/domain/redux/app/app_reducer.dart';
 import 'package:state_selector/features/domain/redux/app/app_state.dart';
+import 'package:state_selector/features/domain/redux/app/middlewares/failures_middleware.dart';
 
 class AppInitialization {
   static Future<Store<AppState>> initRedux() async {
@@ -24,6 +24,7 @@ class AppInitialization {
       appReducer,
       initialState: AppState.initial(),
       middleware: [
+        failureHandlingMiddleware,
         thunkMiddleware,
         if (remoteDevTools != null) remoteDevTools,
       ],
@@ -37,7 +38,10 @@ class AppInitialization {
   }
 
   static void initSystem() {
-    const uiOverlay = SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+    const uiOverlay = SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+    );
     SystemChrome.setSystemUIOverlayStyle(uiOverlay);
   }
 }
