@@ -1,0 +1,4 @@
+enum GeoDataType {
+  polygon,
+  multiPolygon,
+}
