@@ -1,6 +1,5 @@
 import 'package:redux/redux.dart';
 import 'package:state_selector/core/ui_kit/failure_handlers.dart';
-import 'package:state_selector/features/domain/redux/countries/countries_actions.dart';
 import 'package:state_selector/features/domain/redux/maps/maps_actions.dart';
 import 'package:state_selector/main.dart';
 import '../app_state.dart';

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:loading_indicator/loading_indicator.dart';
 import 'package:state_selector/core/extensions/build_context_extension.dart';
 import 'package:state_selector/core/ui_kit/safe_scaffold.dart';
 import 'package:state_selector/features/domain/models/state_model.dart';
