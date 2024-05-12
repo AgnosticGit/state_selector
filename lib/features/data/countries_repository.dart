@@ -6,7 +6,7 @@ import 'package:state_selector/features/domain/models/country_model.dart';
 import 'package:dio/dio.dart';
 
 class CountriesRepository {
-  static Future<Either<Failure, List<CountryModel>>> getCountries() async {
+  Future<Either<Failure, List<CountryModel>>> getCountries() async {
     try {
       final response = await Dio(
         BaseOptions(headers: {
