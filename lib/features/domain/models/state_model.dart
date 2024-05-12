@@ -1,3 +1,7 @@
+
+// @GenerateNiceMocks([MockSpec<StateModel>()])
+// import 'state_model.mocks.dart';
+
 class StateModel {
   const StateModel({
     required this.id,

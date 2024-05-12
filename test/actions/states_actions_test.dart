@@ -1,10 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:state_selector/core/api/failure.dart';
-import 'package:state_selector/core/constants/enums.dart';
-import 'package:state_selector/features/domain/models/geo_data_model.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:state_selector/features/domain/models/state_model.dart';
-import 'package:state_selector/features/domain/redux/maps/maps_actions.dart';
 import 'package:state_selector/features/domain/redux/states/states_actions.dart';
 
 void main() {

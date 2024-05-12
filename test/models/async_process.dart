@@ -1,8 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:state_selector/core/api/async_process.dart';
 import 'package:state_selector/core/api/failure.dart';
-import 'package:state_selector/features/domain/models/country_model.dart';
-import 'package:state_selector/features/domain/redux/countries/countries_state.dart';
 
 void main() {
   group('AsyncProcess', () {

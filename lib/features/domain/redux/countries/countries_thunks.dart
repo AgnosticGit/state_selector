@@ -10,7 +10,7 @@ class CountriesThunkLoadCountries extends CallableThunkAction<AppState> {
     store.dispatch(const CountriesActionLoadingStarted());
 
     final lor = await CountriesRepository().getCountries();
-    
+
     if (lor.isRight) {
       store.dispatch(CountriesActionLoadingFinished(lor.right));
     } else {

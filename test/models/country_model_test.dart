@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:state_selector/core/api/failure.dart';
 import 'package:state_selector/features/domain/models/country_model.dart';
 
 void main() {
