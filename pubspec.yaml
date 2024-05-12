@@ -21,6 +21,8 @@ dependencies:
   flutter_svg: ^2.0.10+1
   flutter_map: ^6.1.0
   latlong2: ^0.9.1
+  top_snackbar_flutter: ^3.1.0
+  loading_indicator: ^3.1.1
 
 dev_dependencies:
   flutter_test:
@@ -28,6 +30,8 @@ dev_dependencies:
   flutter_lints: ^3.0.0
   build_runner: ^2.4.8
   flutter_gen_runner: ^5.4.0 
+  test: ^1.24.9
+  flutter_launcher_icons: ^0.13.1
 
 flutter:
   uses-material-design: true
@@ -40,3 +44,8 @@ flutter_gen:
 
   integrations:
     flutter_svg: true
+
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/app_icon/app_icon.png"

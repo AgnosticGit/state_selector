@@ -1,6 +1,5 @@
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
-import 'package:state_selector/features/data/countries_repository.dart';
 import 'package:state_selector/features/data/states_repository.dart';
 import 'package:state_selector/features/domain/models/country_model.dart';
 import 'package:state_selector/features/domain/redux/app/app_state.dart';

@@ -4,7 +4,6 @@ import 'package:redux/redux.dart';
 import 'package:state_selector/app_initialization.dart';
 import 'package:state_selector/core/navigation/navigation.dart';
 import 'package:state_selector/features/domain/redux/app/app_state.dart';
-import 'package:state_selector/pages/start/start_page.dart';
 
 void main() async {
   final store = await AppInitialization.initRedux();
@@ -14,6 +13,8 @@ void main() async {
 }
 
 class Application extends StatelessWidget {
+  static final globalContextKey = GlobalKey();
+
   const Application({
     required this.store,
     super.key,
@@ -28,6 +29,20 @@ class Application extends StatelessWidget {
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         routerConfig: Navigation.routerConfig,
+        builder: (_, page) {
+          return Overlay(
+            initialEntries: [
+              OverlayEntry(
+                builder: (_) {
+                  return SizedBox(
+                    key: globalContextKey,
+                    child: page,
+                  );
+                },
+              )
+            ],
+          );
+        },
       ),
     );
   }

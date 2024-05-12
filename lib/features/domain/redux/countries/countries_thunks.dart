@@ -9,8 +9,8 @@ class CountriesThunkLoadCountries extends CallableThunkAction<AppState> {
   Future<void> call(Store<AppState> store) async {
     store.dispatch(const CountriesActionLoadingStarted());
 
-    final lor = await CountriesRepository.getCountries();
-    
+    final lor = await CountriesRepository().getCountries();
+
     if (lor.isRight) {
       store.dispatch(CountriesActionLoadingFinished(lor.right));
     } else {
