@@ -92,7 +92,7 @@ class _StateSelectorState extends State<StateSelector> {
             await store.dispatch(MapsThunkLoadGeoData(country: selectedCountry!, state: state));
 
             if (mapsState.stateGeoData != null) {
-              widget.mapController.move(mapsState.stateGeoData!.center, 2);
+              widget.mapController.move(mapsState.stateGeoData!.center, 4);
             }
           },
         );

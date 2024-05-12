@@ -25,4 +25,8 @@ The `/lib/pages` folder is responsible for rendering pages to the end-user. Each
 
 ## Project Settings
 To maintain consistent code formatting, a line length of 100 characters should be adhered to throughout the project.<br>
-The debugger is disabled in the project release since its installation requires additional time.
+The debugger is disabled in the project release since its installation requires additional time to review.
+
+
+## Note
+The project does not implement localization, color palette, or customization of font styles
